@@ -12,8 +12,20 @@ if (!dbUrl) {
   throw new Error("DATABASE_URL is not set");
 }
 
+// Build a robust SSL config: prefer explicit CA via file if available.
+let sslConfig: any = { rejectUnauthorized: true };
+try {
+  const caPath = path.join(process.cwd(), "ca.pem");
+  if (fs.existsSync(caPath)) {
+    sslConfig.ca = fs.readFileSync(caPath).toString();
+  }
+} catch {
+  // ignore; fall back to default SSL behavior
+}
+
 const pool = new Pool({
-  connectionString: `${dbUrl}?sslmode=require&sslrootcert=ca.pem`,
+  connectionString: dbUrl,
+  ssl: sslConfig,
 });
 
 pool
