@@ -20,6 +20,17 @@ A full-stack blog platform built with Next.js App Router, tRPC, Drizzle ORM (Pos
 - **Optimistic UX**: Instant UI updates with React Query + tRPC
 - **Theming**: Dark mode ready via next-themes
 - **Markdown Editor**
+ - Assign one or more categories to posts
+ - Blog listing page showing all posts
+ - Individual post view page
+ - Category filtering on listing page
+ - Dashboard page for managing posts
+ - Draft vs Published post status
+ - Loading and error states
+ - Mobile-responsive design
+ - Full 5-section landing page (Header, Hero, Features, CTA, Footer)
+ - Dark mode support
+ - SEO meta tags
 
 ## Tech Stack
 - **Frontend**: Next.js 15 (App Router), React 19, Tailwind CSS 4, Radix UI
