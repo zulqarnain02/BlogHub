@@ -1,5 +1,4 @@
 # BlogHub - Modern Blog Platform
-# BlogHub - Modern Blog Platform
 
 <p align="center">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&duration=2500&pause=800&color=22C55E&center=true&vCenter=true&width=600&lines=BlogHub;Modern+Blog+Platform;Next.js+%7C+tRPC+%7C+Drizzle+ORM+%7C+Tailwind" alt="BlogHub typing animation" />
@@ -10,7 +9,7 @@
 A full-stack blog platform built with Next.js App Router, tRPC, Drizzle ORM (Postgres), and a polished UI based on Radix + Tailwind. Write posts with markdown, manage categories, and publish with delightful UX.
 
 ## Features
-- **Posts**: Create, edit, publish/unpublish, view by slug
+- **Posts**: Create, edit, publish/draft, view by slug
 - **Categories**: Create, edit, delete, filter posts by categories
 - **Search**: Client-side search for posts and categories
 - **Dashboard**: Manage posts with status filters and actions
@@ -20,7 +19,7 @@ A full-stack blog platform built with Next.js App Router, tRPC, Drizzle ORM (Pos
 
 ## Tech Stack
 - **Frontend**: Next.js 15 (App Router), React 19, Tailwind CSS 4, Radix UI
-- **State/Query**: @tanstack/react-query, tRPC
+- **State/Query**: @tanstack/react-query, tRPC, Zustand
 - **Backend**: tRPC (Next route handler), Drizzle ORM, PostgreSQL
 - **Auth**: tRPC
 - **Misc**: framer-motion, lucide-react icons, zod, react-hook-form
@@ -134,16 +133,16 @@ styles/
 
 ## Screenshots
 - Home / Blog list
-![Home](/screenshots/home.png)
+![Home](/public/screenshots/home.png)
 
 - Post detail
-![Post](/screenshots/post.png)
+![Post](/public/screenshots/post.png)
 
 - Categories
-![Categories](/screenshots/categories.png)
+![Categories](/public/screenshots/categories.png)
 
 - Dashboard
-![Dashboard](/screenshots/dashboard.png)
+![Dashboard](/public/screenshots/dashboard.png)
 
 
 
