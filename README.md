@@ -16,12 +16,14 @@ A full-stack blog platform built with Next.js App Router, tRPC, Drizzle ORM (Pos
 - **Animations**: Framer-motion powered transitions
 - **Optimistic UX**: Instant UI updates with React Query + tRPC
 - **Theming**: Dark mode ready via next-themes
+- **Markdown Editor**
 
 ## Tech Stack
 - **Frontend**: Next.js 15 (App Router), React 19, Tailwind CSS 4, Radix UI
 - **State/Query**: @tanstack/react-query, tRPC, Zustand
 - **Backend**: tRPC (Next route handler), Drizzle ORM, PostgreSQL
 - **Auth**: tRPC
+- **shadcn/ui**: components in `components/ui/*`
 - **Misc**: framer-motion, lucide-react icons, zod, react-hook-form
 
 ## Getting Started
