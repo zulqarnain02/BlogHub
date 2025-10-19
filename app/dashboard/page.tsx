@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -29,6 +29,15 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Spinner } from "@/components/ui/spinner"
 import { Input } from "@/components/ui/input"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -95,6 +104,33 @@ export default function DashboardPage() {
         )
 
   console.log("finalPosts", finalPosts);
+
+
+  // Client-side pagination
+  const [page, setPage] = useState(1)
+  const pageSize = 6
+  const totalPosts = finalPosts?.length ?? 0
+  const totalPages = Math.max(1, Math.ceil(totalPosts / pageSize))
+  const startIdx = (page - 1) * pageSize
+  const paginatedPosts = finalPosts?.slice(startIdx, startIdx + pageSize)
+
+  useEffect(() => {
+    setPage(1)
+  }, [normalizedSearch, filter])
+
+  const goTo = (p: number) => setPage(Math.min(Math.max(1, p), totalPages))
+
+  const getPageList = () => {
+    const pages: (number | "ellipsis")[] = []
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i)
+      return pages
+    }
+    if (page <= 3) return [1, 2, 3, "ellipsis", totalPages]
+    if (page >= totalPages - 2)
+      return [1, "ellipsis", totalPages - 2, totalPages - 1, totalPages]
+    return [1, "ellipsis", page - 1, page, page + 1, "ellipsis", totalPages]
+  }
 
 
   const handleDelete = (postId: number) => {
@@ -209,9 +245,9 @@ export default function DashboardPage() {
               initial="hidden"
               animate="visible"
               className="space-y-4"
-              key={`${filter}-${normalizedSearch}`}
+              key={`${filter}-${normalizedSearch}-${page}`}
             >
-              {finalPosts.map((post) => (
+              {paginatedPosts?.map((post) => (
                 <motion.div variants={itemVariants} key={post.id}>
                   <Card className="hover:shadow-md transition-shadow">
                     <CardHeader>
@@ -295,6 +331,33 @@ export default function DashboardPage() {
                   </Card>
                 </motion.div>
               ))}
+              {totalPages > 1 && (
+                <Pagination className="pt-2">
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious onClick={() => goTo(page - 1)} href="#" />
+                    </PaginationItem>
+                    {getPageList().map((p, idx) => (
+                      <PaginationItem key={idx}>
+                        {p === "ellipsis" ? (
+                          <PaginationEllipsis />
+                        ) : (
+                          <PaginationLink
+                            href="#"
+                            isActive={p === page}
+                            onClick={() => goTo(p as number)}
+                          >
+                            {p}
+                          </PaginationLink>
+                        )}
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationNext onClick={() => goTo(page + 1)} href="#" />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )}
             </motion.div>
           ) : (
             <Card className="p-12 text-center">

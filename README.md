@@ -20,6 +20,7 @@ A full-stack blog platform built with Next.js App Router, tRPC, Drizzle ORM (Pos
 - **Optimistic UX**: Instant UI updates with React Query + tRPC
 - **Theming**: Dark mode ready via next-themes
 - **Markdown Editor**
+ - **Client-side Pagination**: Blog listing and Dashboard lists paginate on the client
  - Assign one or more categories to posts
  - Blog listing page showing all posts
  - Individual post view page
@@ -166,6 +167,14 @@ styles/
 - Uses App Router icons via `app/icon.svg` for favicon (BookOpen logo)
 - Client-side search uses normalized terms and guards empty strings
 - Motion lists may use a changing `key` to reset animations/state when filters change
+ - Pagination: implemented purely on the client with `components/ui/pagination`, slicing arrays per page and resetting to page 1 when filters/search change
+
+### Pagination (client-side)
+- Pages are calculated from filtered results only; no server round-trips.
+- State: `page` with `pageSize = 6` (tweakable). Derived values: `totalPages`, `startIdx`, `paginated = data.slice(startIdx, startIdx + pageSize)`.
+- When search text or category/status filters change, `useEffect` resets `page` to 1 to keep UX predictable.
+- Controls: shadcn `Pagination`, `PaginationPrevious/Next`, and numbered `PaginationLink`s with compact ellipses.
+- Implemented in `app/blog/page.tsx` and `app/dashboard/page.tsx` with the same pattern.
 
 ## Roadmap
 - Authentication & roles

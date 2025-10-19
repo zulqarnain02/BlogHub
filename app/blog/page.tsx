@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -13,6 +13,15 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination"
 
 export default function BlogPage() {
   const { selectedCategories, toggleCategory, setSelectedCategories } =
@@ -59,6 +68,33 @@ export default function BlogPage() {
     categorySearch.length > 0
       ? filteredCategories
       : filteredCategories?.slice(0, 5)
+
+  // Client-side pagination
+  const [page, setPage] = useState(1)
+  const pageSize = 6
+  const totalPosts = searchedPosts?.length ?? 0
+  const totalPages = Math.max(1, Math.ceil(totalPosts / pageSize))
+  const startIdx = (page - 1) * pageSize
+  const paginatedPosts = searchedPosts?.slice(startIdx, startIdx + pageSize)
+
+  useEffect(() => {
+    // Reset to first page when filters/search change or total pages shrink
+    setPage(1)
+  }, [postSearch, selectedCategories.join(","), totalPosts])
+
+  const goTo = (p: number) => setPage(Math.min(Math.max(1, p), totalPages))
+
+  const getPageList = () => {
+    const pages: (number | "ellipsis")[] = []
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i)
+      return pages
+    }
+    if (page <= 3) return [1, 2, 3, "ellipsis", totalPages]
+    if (page >= totalPages - 2)
+      return [1, "ellipsis", totalPages - 2, totalPages - 1, totalPages]
+    return [1, "ellipsis", page - 1, page, page + 1, "ellipsis", totalPages]
+  }
 
 
   return (
@@ -208,8 +244,9 @@ export default function BlogPage() {
                 </AlertDescription>
               </Alert>
             ) : searchedPosts && searchedPosts.length > 0 ? (
-              <div className="space-y-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                {searchedPosts.map((post) => (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {paginatedPosts?.map((post) => (
                   <Link key={post.id} href={`/blog/${post.slug}`}>
                     <Card className="p-4 sm:p-6 hover:shadow-lg transition cursor-pointer h-full group">
                       <div className="space-y-4">
@@ -243,7 +280,35 @@ export default function BlogPage() {
                       </div>
                     </Card>
                   </Link>
-                ))}
+                  ))}
+                </div>
+                {totalPages > 1 && (
+                  <Pagination className="pt-2">
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious onClick={() => goTo(page - 1)} href="#" />
+                      </PaginationItem>
+                      {getPageList().map((p, idx) => (
+                        <PaginationItem key={idx}>
+                          {p === "ellipsis" ? (
+                            <PaginationEllipsis />
+                          ) : (
+                            <PaginationLink
+                              href="#"
+                              isActive={p === page}
+                              onClick={() => goTo(p as number)}
+                            >
+                              {p}
+                            </PaginationLink>
+                          )}
+                        </PaginationItem>
+                      ))}
+                      <PaginationItem>
+                        <PaginationNext onClick={() => goTo(page + 1)} href="#" />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                )}
               </div>
             ) : (
               <Card className="p-8 sm:p-12 text-center">
