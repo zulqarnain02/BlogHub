@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { Menu, X, BookOpen } from "lucide-react"
 
 
@@ -13,6 +14,7 @@ const navLinks = [
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,15 +38,23 @@ export function Navigation() {
           </Link>
 
           <div className="hidden sm:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const active = pathname === link.href
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={
+                    active
+                      ? "text-foreground font-medium"
+                      : "text-muted-foreground hover:text-foreground transition-colors"
+                  }
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
           </div>
 
           <div className="sm:hidden">
@@ -57,16 +67,23 @@ export function Navigation() {
       {isOpen && (
         <div className="sm:hidden bg-card shadow-lg">
           <div className="px-4 pt-2 pb-4 space-y-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-secondary"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const active = pathname === link.href
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={
+                    "block px-3 py-2 rounded-md text-base font-medium transition-colors " +
+                    (active ? "bg-secondary text-foreground" : "text-foreground hover:bg-secondary")
+                  }
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
           </div>
         </div>
       )}

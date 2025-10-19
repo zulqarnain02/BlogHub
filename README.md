@@ -8,6 +8,9 @@
 
 A full-stack blog platform built with Next.js App Router, tRPC, Drizzle ORM (Postgres), and a polished UI based on Radix + Tailwind. Write posts with markdown, manage categories, and publish with delightful UX.
 
+## 🙋🙋🙋Assumptions
+- Since there is no mention of author information, the dashboard will display all blogs, regardless of who created them, whether they are in draft or published status.
+
 ## Features
 - **Posts**: Create, edit, publish/draft, view by slug
 - **Categories**: Create, edit, delete, filter posts by categories
